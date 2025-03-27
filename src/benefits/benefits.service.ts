@@ -4,6 +4,7 @@ import { UpdateBenefitDto } from './dto/update-benefit.dto';
 import { Benefit } from './entities/benefit.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { DataBenefitDto } from './dto/data-benefit.dto';
 
 @Injectable()
 export class BenefitsService {
@@ -13,10 +14,12 @@ export class BenefitsService {
     private readonly benefitModel: Model<Benefit> 
   ) {}
 
-  async create(createBenefitDto: CreateBenefitDto) {
-    //createBenefitDto.commerce = createBenefitDto.commerce.toLowerCase();
+  async create(dataBenefitDto: DataBenefitDto) {
+    //dataBenefitDto.commerce = dataBenefitDto.commerce.toLowerCase();
       try {
-        const benefit = await this.benefitModel.create(createBenefitDto);
+        
+    console.log('service ', dataBenefitDto)
+        const benefit = await this.benefitModel.create(dataBenefitDto);
         return benefit;
       } catch (error) {
         //this.handleExceptions(error);

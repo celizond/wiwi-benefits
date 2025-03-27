@@ -9,7 +9,8 @@ export class BenefitsController {
 
   @Post()
   create(@Body() createBenefitDto: CreateBenefitDto) {
-    return this.benefitsService.create(createBenefitDto);
+    console.log('controller ', createBenefitDto)
+    return this.benefitsService.create(createBenefitDto.data);
   }
 
   @Get()

@@ -1,38 +1,19 @@
-import { IsDateString, IsInt, IsOptional, IsPositive, IsString, IsUUID, Min } from "class-validator";
+import { IsDateString, IsInt, IsObject, IsOptional, IsPositive, IsString, IsUUID, Min, ValidateNested } from "class-validator";
+import { DataBenefitDto } from "./data-benefit.dto";
+import { MetaBenefitDto } from "./meta-benefit.dto";
+import { Type } from "class-transformer";
 
 export class CreateBenefitDto {
 
+    @ValidateNested()
+    @Type(() => DataBenefitDto)
+    data!: DataBenefitDto
+
+    @IsOptional()
+    @ValidateNested()
+    @Type(() => MetaBenefitDto)
+    meta: MetaBenefitDto
     /* @IsString()
     @IsUUID()
     id: string; */
-
-    @IsInt()
-    @IsPositive()
-    @Min(1)
-    points: number;
-
-    @IsOptional()
-    @IsInt()
-    @IsPositive()
-    @Min(1)   
-    discountPercentage: number;
-
-    @IsOptional()
-    @IsDateString()
-    startValidity: string;
-        
-    @IsOptional()
-    @IsDateString()
-    endValidity: string;
-        
-    @IsOptional()
-    @IsString()
-    commerce: string;
-    
-    @IsOptional()
-    @IsInt()
-    @IsPositive()
-    @Min(1)
-    couponCode: number;
-        
 }
