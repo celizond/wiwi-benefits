@@ -28,8 +28,8 @@ export class Benefit extends Document{
     @Prop({unique:true,index:true})
     couponCode: number;
     
-    /* @Prop({unique:false,index:true})
-    image: string; */
+    @Prop({unique:false,index:true})
+    imageUrl: string;
 
 }
 export const BenefitSchema = SchemaFactory.createForClass(Benefit);

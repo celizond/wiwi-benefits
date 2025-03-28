@@ -7,7 +7,7 @@ export class CreateBenefitDto {
 
     @ValidateNested()
     @Type(() => DataBenefitDto)
-    data!: DataBenefitDto
+    data: DataBenefitDto
 
     @IsOptional()
     @ValidateNested()

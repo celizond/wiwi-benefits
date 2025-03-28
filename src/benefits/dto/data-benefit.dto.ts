@@ -26,6 +26,6 @@ export class DataBenefitDto {
     @Min(1)
     couponCode: number;
         
-    /* @IsString()
-    image: string; */
+    @IsString()
+    imageUrl: string;
 }
