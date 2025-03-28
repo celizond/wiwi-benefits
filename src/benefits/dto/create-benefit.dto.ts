@@ -1,7 +1,7 @@
-import { IsDateString, IsInt, IsObject, IsOptional, IsPositive, IsString, IsUUID, Min, ValidateNested } from "class-validator";
+import { IsOptional, ValidateNested } from "class-validator";
+import { Type } from "class-transformer";
 import { DataBenefitDto } from "./data-benefit.dto";
 import { MetaBenefitDto } from "./meta-benefit.dto";
-import { Type } from "class-transformer";
 
 export class CreateBenefitDto {
 
@@ -13,7 +13,4 @@ export class CreateBenefitDto {
     @ValidateNested()
     @Type(() => MetaBenefitDto)
     meta: MetaBenefitDto
-    /* @IsString()
-    @IsUUID()
-    id: string; */
 }

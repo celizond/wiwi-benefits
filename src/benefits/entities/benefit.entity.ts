@@ -1,11 +1,14 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from 'mongoose';
+import { v4 as uuidv4 } from 'uuid';
 
 @Schema()
 export class Benefit extends Document{
 
-    /* @Prop({unique:false,index:true})
-    id: string; */
+    @Prop({ type: String, default: function genUUID() {
+        return uuidv4()
+    }})
+    idbenefit: string;
 
     @Prop({unique:false,index:true})
     points: number;

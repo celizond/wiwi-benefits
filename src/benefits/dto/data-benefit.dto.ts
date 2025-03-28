@@ -1,10 +1,6 @@
-import { IsDateString, IsInt, IsPositive, IsString, IsUUID, Min } from "class-validator";
+import { IsDateString, IsInt, IsPositive, IsString, Min } from "class-validator";
 
 export class DataBenefitDto {
-
-    /* @IsString()
-    @IsUUID()
-    id: string; */
 
     @IsInt()
     @IsPositive()
