@@ -10,12 +10,10 @@ export class FilterBenefitDto {
     discountPercentage?: ComparisonOperators | number;
 
     @IsOptional()
-    @IsDateString()
-    startValidity?: string;
+    startValidity?: ComparisonOperators | string;
             
     @IsOptional()
-    @IsDateString()
-    endValidity?: string;
+    endValidity?: ComparisonOperators | string;
             
     @IsOptional()
     @IsString()
