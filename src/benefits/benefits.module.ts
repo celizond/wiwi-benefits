@@ -15,6 +15,6 @@ import { Benefit, BenefitSchema } from './entities/benefit.entity';
       }
     ])
   ],
-  exports: [MongooseModule]
+  exports: []
 })
 export class BenefitsModule {}
