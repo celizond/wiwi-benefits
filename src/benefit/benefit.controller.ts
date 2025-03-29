@@ -2,6 +2,8 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { BenefitService } from './benefit.service';
 import { CreateBenefitDto } from './dto/create-benefit.dto';
 import { UpdateBenefitDto } from './dto/update-benefit.dto';
+import { DeleteBenefitDto } from './dto/delete-benefit.dto';
+import { DeleteManyBenefitDto } from './dto/delete-many-benefits.dto';
 
 @Controller('benefit')
 export class BenefitController {
@@ -28,8 +30,14 @@ export class BenefitController {
     return this.benefitService.update(id, updateBenefitDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.benefitService.remove(+id);
+  @Delete(':id') //agregar delete
+  remove(@Param('id') id: string, @Body() deleteBenefitDto: DeleteBenefitDto) {
+    return this.benefitService.remove(id, deleteBenefitDto);
   }
+
+  @Delete()
+  removeMany(@Body() deleteManyBenefitDto: DeleteManyBenefitDto) {
+    return this.benefitService.removeMany(deleteManyBenefitDto);
+  }
+
 }

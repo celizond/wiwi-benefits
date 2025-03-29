@@ -4,8 +4,9 @@ import { Model } from 'mongoose';
 import { v4 as uuid } from "uuid";
 import { Benefit } from './entities/benefit.entity';
 import { UpdateBenefitDto } from './dto/update-benefit.dto';
-import { DataBenefitDto } from './dto/data-benefit.dto';
 import { CreateBenefitDto } from './dto/create-benefit.dto';
+import { DeleteBenefitDto } from './dto/delete-benefit.dto';
+import { DeleteManyBenefitDto } from './dto/delete-many-benefits.dto';
 
 //Que hacer con meta
 
@@ -56,8 +57,21 @@ export class BenefitService {
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} benefit`;
+  async remove(id: string, deleteBenefitDto: DeleteBenefitDto) {
+    const { deletedCount } = await this.benefitModel.deleteOne({ idBenefit: id });
+    if ( deletedCount === 0 )
+      throw new BadRequestException(`Benefit with id "${ id }" not found`);
+    return `Deleted benefit with id ${id}`;
+  }
+
+  async removeMany(deleteManyBenefitDto: DeleteManyBenefitDto) {
+    const { filter } = deleteManyBenefitDto;
+    const cleanedFilter = this.cleanObject(filter);
+
+    const { deletedCount } = await this.benefitModel.deleteMany(cleanedFilter);
+    if ( deletedCount === 0 )
+      throw new BadRequestException(`Benefits with condition "${ deleteManyBenefitDto.filter}" not found`);
+    return `Deleted benefits`;
   }
 
   private handleExceptions(error: any) {
@@ -65,5 +79,11 @@ export class BenefitService {
       throw new BadRequestException(`Benefit exists in db ${JSON.stringify(error.keyValue)}`)
     }
     throw new InternalServerErrorException(`Can't create Benefit - check server logs`)
+  }
+
+  private cleanObject(obj: Record<string, any>) {
+    return Object.fromEntries(
+      Object.entries(obj).filter(([key, value]) => value !== undefined)
+    );
   }
 }

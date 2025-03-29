@@ -1,6 +1,6 @@
 import { IsDateString, IsInt, IsOptional, IsPositive, IsString, Min } from "class-validator";
 
-export class DataBenefitUpdateDto {
+export class OptionalDataBenefitDto {
 
     @IsOptional()
     @IsInt()
