@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Benefit } from './entities/benefit.entity';
@@ -30,8 +30,15 @@ export class BenefitService {
     return `This action returns all benefits`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} benefit`;
+  async findOne(id: string) {
+    //habría que agregar otro valor de consulta? como el codigo de beneficio
+    const benefitFound: Benefit | null = await this.benefitModel.findOne({ idBenefit: id });
+    
+    if ( benefitFound === null ) {
+      throw new NotFoundException(`Benefit with id "${ id }" not found`);
+    }
+    
+    return benefitFound;
   }
 
   update(id: number, updateBenefitDto: UpdateBenefitDto) {

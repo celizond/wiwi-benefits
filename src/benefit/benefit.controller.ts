@@ -20,7 +20,7 @@ export class BenefitController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.benefitService.findOne(+id);
+    return this.benefitService.findOne(id);
   }
 
   @Patch(':id')
