@@ -25,7 +25,7 @@ export class BenefitController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateBenefitDto: UpdateBenefitDto) {
-    return this.benefitService.update(+id, updateBenefitDto);
+    return this.benefitService.update(id, updateBenefitDto);
   }
 
   @Delete(':id')

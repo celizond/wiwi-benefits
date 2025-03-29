@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 @Schema()
 export class Benefit extends Document{
 
-    @Prop({ type: String, default: function genUUID() {
+    @Prop({unique:true, type: String, default: function genUUID() {
         return uuidv4()
     }})
     idBenefit: string;

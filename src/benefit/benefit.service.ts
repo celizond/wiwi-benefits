@@ -1,10 +1,12 @@
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { v4 as uuid } from "uuid";
 import { Benefit } from './entities/benefit.entity';
 import { UpdateBenefitDto } from './dto/update-benefit.dto';
 import { DataBenefitDto } from './dto/data-benefit.dto';
-import { v4 as uuid } from "uuid";
+
+//Que hacer con meta
 
 @Injectable()
 export class BenefitService {
@@ -15,16 +17,16 @@ export class BenefitService {
   ) {}
 
   async create(dataBenefitDto: DataBenefitDto) {
-      try {
-        const idBenefit = uuid();
-        const benefitWithId = {...dataBenefitDto, idBenefit:idBenefit}
-        const benefit = await this.benefitModel.create(benefitWithId);
-        return `Created benefit:
-        ${benefit}`;
-      } catch (error) {
-        this.handleExceptions(error);
-      }
+    try {
+      const idBenefit = uuid();
+      const benefitWithId = {...dataBenefitDto, idBenefit:idBenefit}
+      const benefit = await this.benefitModel.create(benefitWithId);
+      return `Created benefit:
+      ${benefit}`;
+    } catch (error) {
+      this.handleExceptions(error);
     }
+  }
 
   findAll() {
     return `This action returns all benefits`;
@@ -41,8 +43,16 @@ export class BenefitService {
     return benefitFound;
   }
 
-  update(id: number, updateBenefitDto: UpdateBenefitDto) {
-    return `This action updates a #${id} benefit`;
+  async update(id: string, updateBenefitDto: UpdateBenefitDto) {
+    const benefit = await this.findOne(id);
+    try {
+      await benefit.updateOne( updateBenefitDto.data, {new: true});
+      return `Updated benefit:
+      ${JSON.stringify({...benefit.toJSON(), ...updateBenefitDto.data }, null, 2)}`;  
+      //Ver por qué no devuelve el objeto completo
+    } catch (error) {
+      this.handleExceptions(error);
+    }
   }
 
   remove(id: number) {
