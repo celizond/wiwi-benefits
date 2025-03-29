@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { BenefitsModule } from './benefits/benefits.module';
+import { BenefitModule } from './benefit/benefit.module';
 import { CommonModule } from './common/common.module';
 
 @Module({
@@ -8,7 +8,7 @@ import { CommonModule } from './common/common.module';
     MongooseModule.forRoot('mongodb://localhost:27017/benefits',{
       dbName: 'benefits'
     }), 
-    BenefitsModule, CommonModule,
+    BenefitModule, CommonModule,
   ],
 })
 export class AppModule {}
