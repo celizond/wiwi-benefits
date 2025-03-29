@@ -70,8 +70,9 @@ export class BenefitService {
 
     const { deletedCount } = await this.benefitModel.deleteMany(cleanedFilter);
     if ( deletedCount === 0 )
-      throw new BadRequestException(`Benefits with condition "${ deleteManyBenefitDto.filter}" not found`);
-    return `Deleted benefits`;
+      throw new BadRequestException(`Not found benefits with condition: 
+    ${ JSON.stringify(cleanedFilter)}`);
+    return `Deleted ${deletedCount} benefit`;
   }
 
   private handleExceptions(error: any) {
