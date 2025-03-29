@@ -9,8 +9,7 @@ export class BenefitController {
 
   @Post()
   create(@Body() createBenefitDto: CreateBenefitDto) {
-    console.log('controller ', createBenefitDto)
-    return this.benefitService.create(createBenefitDto.data);
+    return this.benefitService.create(createBenefitDto);
   }
 
   @Get()
@@ -25,6 +24,7 @@ export class BenefitController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateBenefitDto: UpdateBenefitDto) {
+    //Hay alguna manera para no tener que hacer un update-data-dto?
     return this.benefitService.update(id, updateBenefitDto);
   }
 

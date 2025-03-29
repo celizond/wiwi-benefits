@@ -5,6 +5,7 @@ import { v4 as uuid } from "uuid";
 import { Benefit } from './entities/benefit.entity';
 import { UpdateBenefitDto } from './dto/update-benefit.dto';
 import { DataBenefitDto } from './dto/data-benefit.dto';
+import { CreateBenefitDto } from './dto/create-benefit.dto';
 
 //Que hacer con meta
 
@@ -16,10 +17,10 @@ export class BenefitService {
     private readonly benefitModel: Model<Benefit> 
   ) {}
 
-  async create(dataBenefitDto: DataBenefitDto) {
+  async create(createBenefitDto: CreateBenefitDto) {
     try {
       const idBenefit = uuid();
-      const benefitWithId = {...dataBenefitDto, idBenefit:idBenefit}
+      const benefitWithId = {...createBenefitDto.data, idBenefit:idBenefit}
       const benefit = await this.benefitModel.create(benefitWithId);
       return `Created benefit:
       ${benefit}`;
@@ -63,7 +64,6 @@ export class BenefitService {
     if(error.code === 11000) {
       throw new BadRequestException(`Benefit exists in db ${JSON.stringify(error.keyValue)}`)
     }
-    console.log(error);
     throw new InternalServerErrorException(`Can't create Benefit - check server logs`)
   }
 }
