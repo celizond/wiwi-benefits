@@ -4,6 +4,7 @@ import { CreateBenefitDto } from './dto/create-benefit.dto';
 import { UpdateBenefitDto } from './dto/update-benefit.dto';
 import { DeleteBenefitDto } from './dto/delete-benefit.dto';
 import { DeleteManyBenefitDto } from './dto/delete-many-benefits.dto';
+import { UpdateManyBenefitsDto } from './dto/update-many-benefits.dto';
 
 @Controller('benefit')
 export class BenefitController {
@@ -14,10 +15,10 @@ export class BenefitController {
     return this.benefitService.create(createBenefitDto);
   }
 
-  @Get()
+  /* @Get()
   findAll() {
     return this.benefitService.findAll();
-  }
+  } */
 
   @Get(':id')
   findOne(@Param('id') id: string) {
@@ -26,8 +27,13 @@ export class BenefitController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateBenefitDto: UpdateBenefitDto) {
-    //Hay alguna manera para no tener que hacer un update-data-dto?
     return this.benefitService.update(id, updateBenefitDto);
+  }
+
+  @Patch()
+  updateMany(@Body() updateManyBenefitsDto: UpdateManyBenefitsDto) {
+    UpdateManyBenefitsDto
+    return this.benefitService.updateMany(updateManyBenefitsDto);
   }
 
   @Delete(':id') //agregar delete

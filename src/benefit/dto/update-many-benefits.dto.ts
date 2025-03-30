@@ -4,11 +4,11 @@ import { Type } from 'class-transformer';
 import { OptionalDataBenefitDto } from '../../common/dto/optional-data-benefit.dto';
 import { Benefit } from '../entities/benefit.entity';
 import { RootFilterQuery } from 'mongoose';
+import { UpdateBenefitDto } from './update-benefit.dto';
 
-export class UpdateManyBenefitsDto extends PartialType(OptionalDataBenefitDto) {
+export class UpdateManyBenefitsDto extends PartialType(UpdateBenefitDto) {
 
     @ValidateNested()
     @Type(() => OptionalDataBenefitDto)
     filter: RootFilterQuery<Benefit>;
-    //Como debería ser el filtro? que posibles datos tiene
 }

@@ -7,6 +7,7 @@ import { UpdateBenefitDto } from './dto/update-benefit.dto';
 import { CreateBenefitDto } from './dto/create-benefit.dto';
 import { DeleteBenefitDto } from './dto/delete-benefit.dto';
 import { DeleteManyBenefitDto } from './dto/delete-many-benefits.dto';
+import { UpdateManyBenefitsDto } from './dto/update-many-benefits.dto';
 
 //Que hacer con meta
 
@@ -30,10 +31,6 @@ export class BenefitService {
     }
   }
 
-  findAll() {
-    return `This action returns all benefits`;
-  }
-
   async findOne(id: string) {
     //habría que agregar otro valor de consulta? como el codigo de beneficio
     const benefitFound: Benefit | null = await this.benefitModel.findOne({ idBenefit: id });
@@ -50,11 +47,27 @@ export class BenefitService {
     try {
       await benefit.updateOne( updateBenefitDto.data, {new: true});
       return `Updated benefit:
-      ${JSON.stringify({...benefit.toJSON(), ...updateBenefitDto.data }, null, 2)}`;  
-      //Ver por qué no devuelve el objeto completo
+      ${JSON.stringify({...benefit.toJSON(), ...updateBenefitDto.data }, null, 2)}`;
     } catch (error) {
       this.handleExceptions(error);
     }
+  }
+
+  filterItems(bodyFront: any) {
+    const { filter } = bodyFront;
+    const cleanedFilterData = this.cleanObject(filter);
+    return cleanedFilterData;
+  }
+
+
+  async updateMany(updateManyBenefitsDto: UpdateManyBenefitsDto) {
+    const cleanedFilterData = this.filterItems(updateManyBenefitsDto);
+
+    const { deletedCount } = await this.benefitModel.deleteMany(cleanedFilterData);
+    if ( deletedCount === 0 )
+      throw new BadRequestException(`Not found benefits with condition: 
+    ${ JSON.stringify(cleanedFilterData)}`);
+    return `Deleted ${deletedCount} benefit`;
   }
 
   async remove(id: string, deleteBenefitDto: DeleteBenefitDto) {
@@ -65,14 +78,13 @@ export class BenefitService {
   }
 
   async removeMany(deleteManyBenefitDto: DeleteManyBenefitDto) {
-    const { filter } = deleteManyBenefitDto;
-    const cleanedFilter = this.cleanObject(filter);
+    const cleanedFilterData = this.filterItems(deleteManyBenefitDto);
 
-    const { deletedCount } = await this.benefitModel.deleteMany(cleanedFilter);
+    const { deletedCount } = await this.benefitModel.deleteMany(cleanedFilterData);
     if ( deletedCount === 0 )
       throw new BadRequestException(`Not found benefits with condition: 
-    ${ JSON.stringify(cleanedFilter)}`);
-    return `Deleted ${deletedCount} benefit`;
+    ${ JSON.stringify({...cleanedFilterData, ...deleteManyBenefitDto})}`);
+    return `Deleted ${JSON.stringify({...cleanedFilterData, ...deleteManyBenefitDto})} benefit`;
   }
 
   private handleExceptions(error: any) {
