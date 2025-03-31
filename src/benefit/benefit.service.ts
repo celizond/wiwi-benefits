@@ -6,7 +6,7 @@ import { Benefit } from './entities/benefit.entity';
 import { UpdateBenefitDto } from './dto/update-benefit.dto';
 import { CreateBenefitDto } from './dto/create-benefit.dto';
 import { DeleteBenefitDto } from './dto/delete-benefit.dto';
-import { DeleteManyBenefitDto } from './dto/delete-many-benefits.dto';
+import { DeleteManyBenefitsDto } from './dto/delete-many-benefits.dto';
 import { UpdateManyBenefitsDto } from './dto/update-many-benefits.dto';
 
 //Que hacer con meta
@@ -18,6 +18,24 @@ export class BenefitService {
     @InjectModel(Benefit.name) //Nombre de modelo
     private readonly benefitModel: Model<Benefit> 
   ) {}
+
+  private handleExceptions(error: any) {
+    if(error.code === 11000) {
+      throw new BadRequestException(`Benefit exists in db ${JSON.stringify(error.keyValue)}`)
+    }
+    throw new InternalServerErrorException(`Can't create Benefit - check server logs`)
+  }
+
+  private cleanObject(obj: Record<string, any>) {
+    return Object.fromEntries(
+      Object.entries(obj).filter(([key, value]) => value !== undefined)
+    );
+  }
+
+  private filterItems(filter: any) {
+    const cleanedFilter = this.cleanObject(filter);
+    return cleanedFilter;
+  }
 
   async create(createBenefitDto: CreateBenefitDto) {
     try {
@@ -53,21 +71,14 @@ export class BenefitService {
     }
   }
 
-  filterItems(bodyFront: any) {
-    const { filter } = bodyFront;
-    const cleanedFilterData = this.cleanObject(filter);
-    return cleanedFilterData;
-  }
-
-
   async updateMany(updateManyBenefitsDto: UpdateManyBenefitsDto) {
-    const cleanedFilterData = this.filterItems(updateManyBenefitsDto);
+    const { filter, data } = updateManyBenefitsDto;
+    const cleanedFilter = this.filterItems(filter);
 
-    const { deletedCount } = await this.benefitModel.deleteMany(cleanedFilterData);
-    if ( deletedCount === 0 )
-      throw new BadRequestException(`Not found benefits with condition: 
-    ${ JSON.stringify(cleanedFilterData)}`);
-    return `Deleted ${deletedCount} benefit`;
+    const { modifiedCount } = await this.benefitModel.updateMany(cleanedFilter, data);
+    if ( modifiedCount === 0 )
+      throw new BadRequestException('Not found benefit(s) with condition to update');
+    return `Updated ${modifiedCount} benefit(s)`;
   }
 
   async remove(id: string, deleteBenefitDto: DeleteBenefitDto) {
@@ -77,26 +88,14 @@ export class BenefitService {
     return `Deleted benefit with id ${id}`;
   }
 
-  async removeMany(deleteManyBenefitDto: DeleteManyBenefitDto) {
-    const cleanedFilterData = this.filterItems(deleteManyBenefitDto);
+  async removeMany(deleteManyBenefitDto: DeleteManyBenefitsDto) {
+    const { filter } = deleteManyBenefitDto;
+    const cleanedFilter = this.filterItems(filter);
 
-    const { deletedCount } = await this.benefitModel.deleteMany(cleanedFilterData);
+    const { deletedCount } = await this.benefitModel.deleteMany(cleanedFilter);
     if ( deletedCount === 0 )
-      throw new BadRequestException(`Not found benefits with condition: 
-    ${ JSON.stringify({...cleanedFilterData, ...deleteManyBenefitDto})}`);
-    return `Deleted ${JSON.stringify({...cleanedFilterData, ...deleteManyBenefitDto})} benefit`;
+      throw new BadRequestException('Not found benefit(s) with condition to delete');
+    return `Deleted ${deletedCount} benefit(s)`;
   }
 
-  private handleExceptions(error: any) {
-    if(error.code === 11000) {
-      throw new BadRequestException(`Benefit exists in db ${JSON.stringify(error.keyValue)}`)
-    }
-    throw new InternalServerErrorException(`Can't create Benefit - check server logs`)
-  }
-
-  private cleanObject(obj: Record<string, any>) {
-    return Object.fromEntries(
-      Object.entries(obj).filter(([key, value]) => value !== undefined)
-    );
-  }
 }

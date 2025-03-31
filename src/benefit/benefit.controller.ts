@@ -3,7 +3,7 @@ import { BenefitService } from './benefit.service';
 import { CreateBenefitDto } from './dto/create-benefit.dto';
 import { UpdateBenefitDto } from './dto/update-benefit.dto';
 import { DeleteBenefitDto } from './dto/delete-benefit.dto';
-import { DeleteManyBenefitDto } from './dto/delete-many-benefits.dto';
+import { DeleteManyBenefitsDto } from './dto/delete-many-benefits.dto';
 import { UpdateManyBenefitsDto } from './dto/update-many-benefits.dto';
 
 @Controller('benefit')
@@ -32,7 +32,6 @@ export class BenefitController {
 
   @Patch()
   updateMany(@Body() updateManyBenefitsDto: UpdateManyBenefitsDto) {
-    UpdateManyBenefitsDto
     return this.benefitService.updateMany(updateManyBenefitsDto);
   }
 
@@ -42,8 +41,8 @@ export class BenefitController {
   }
 
   @Delete()
-  removeMany(@Body() deleteManyBenefitDto: DeleteManyBenefitDto) {
-    return this.benefitService.removeMany(deleteManyBenefitDto);
+  removeMany(@Body() deleteManyBenefitsDto: DeleteManyBenefitsDto) {
+    return this.benefitService.removeMany(deleteManyBenefitsDto);
   }
 
 }

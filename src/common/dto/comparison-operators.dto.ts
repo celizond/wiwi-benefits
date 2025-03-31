@@ -4,25 +4,25 @@ export class ComparisonOperators {
     @IsOptional()
     @IsInt()
     @Min(1)
-    $gt?: number;  // Greater than
+    $gt?: number;
     
     @IsOptional()
     @IsInt()
     @Min(1)
-    $lt?: number;  // Less than
+    $lt?: number;
     
     @IsOptional()
     @IsInt()
     @Min(1)
-    $gte?: number; // Greater than or equal
+    $gte?: number;
     
     @IsOptional()
     @IsInt()
     @Min(1)
-    $lte?: number; // Less than or equal
+    $lte?: number;
   
     @IsOptional()
     @IsInt()
     @Min(1)
-    $eq?: number;  // Equal to
+    $eq?: number;
   }

@@ -2,13 +2,16 @@ import { PartialType } from '@nestjs/mapped-types';
 import { ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { OptionalDataBenefitDto } from '../../common/dto/optional-data-benefit.dto';
-import { Benefit } from '../entities/benefit.entity';
-import { RootFilterQuery } from 'mongoose';
-import { UpdateBenefitDto } from './update-benefit.dto';
+import { CreateBenefitDto } from './create-benefit.dto';
+import { FilterBenefitDto } from 'src/common/dto/filter-benefit.dto';
 
-export class UpdateManyBenefitsDto extends PartialType(UpdateBenefitDto) {
+export class UpdateManyBenefitsDto extends PartialType(CreateBenefitDto) {
 
     @ValidateNested()
     @Type(() => OptionalDataBenefitDto)
-    filter: RootFilterQuery<Benefit>;
+    data: any;
+
+    @ValidateNested()
+    @Type(() => FilterBenefitDto)
+    filter: FilterBenefitDto;
 }
