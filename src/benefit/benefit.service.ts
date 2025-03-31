@@ -8,14 +8,13 @@ import { CreateBenefitDto } from './dto/create-benefit.dto';
 import { DeleteBenefitDto } from './dto/delete-benefit.dto';
 import { DeleteManyBenefitsDto } from './dto/delete-many-benefits.dto';
 import { UpdateManyBenefitsDto } from './dto/update-many-benefits.dto';
-
-//Que hacer con meta
+import { ObtainBenefitDto } from './dto/obtain-benefit.dto';
 
 @Injectable()
 export class BenefitService {
 
   constructor (
-    @InjectModel(Benefit.name) //Nombre de modelo
+    @InjectModel(Benefit.name)
     private readonly benefitModel: Model<Benefit> 
   ) {}
 
@@ -50,13 +49,28 @@ export class BenefitService {
   }
 
   async findOne(id: string) {
-    //habría que agregar otro valor de consulta? como el codigo de beneficio
     const benefitFound: Benefit | null = await this.benefitModel.findOne({ idBenefit: id });
     
     if ( benefitFound === null ) {
       throw new NotFoundException(`Benefit with id "${ id }" not found`);
     }
     
+    return benefitFound;
+  }
+
+  async find(id: string, obtainBenefitDto: ObtainBenefitDto) {
+    let benefitFound;
+    const { filter } = obtainBenefitDto;
+    if (filter !== undefined) {
+      const cleanedFilter = this.filterItems(filter);
+      const allBenefitsFound = await this.benefitModel.find(cleanedFilter);
+      benefitFound = allBenefitsFound.find(benefit => benefit.idBenefit === id);
+    } else {
+      benefitFound = this.findOne(id);
+    }
+    if ( benefitFound === undefined ) {
+      throw new BadRequestException(`Not found benefit with id "${ id }" ${filter && ' and filter'}`);
+    }
     return benefitFound;
   }
 

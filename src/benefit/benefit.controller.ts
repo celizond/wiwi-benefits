@@ -5,6 +5,7 @@ import { UpdateBenefitDto } from './dto/update-benefit.dto';
 import { DeleteBenefitDto } from './dto/delete-benefit.dto';
 import { DeleteManyBenefitsDto } from './dto/delete-many-benefits.dto';
 import { UpdateManyBenefitsDto } from './dto/update-many-benefits.dto';
+import { ObtainBenefitDto } from './dto/obtain-benefit.dto';
 
 @Controller('benefit')
 export class BenefitController {
@@ -15,14 +16,9 @@ export class BenefitController {
     return this.benefitService.create(createBenefitDto);
   }
 
-  /* @Get()
-  findAll() {
-    return this.benefitService.findAll();
-  } */
-
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.benefitService.findOne(id);
+  findOne(@Param('id') id: string, @Body() obtainBenefitDto: ObtainBenefitDto) {
+    return this.benefitService.find(id, obtainBenefitDto);
   }
 
   @Patch(':id')
@@ -44,5 +40,9 @@ export class BenefitController {
   removeMany(@Body() deleteManyBenefitsDto: DeleteManyBenefitsDto) {
     return this.benefitService.removeMany(deleteManyBenefitsDto);
   }
-
+  
+  /* @Get()
+  findAll() {
+    return this.benefitService.findAll();
+  } */
 }
