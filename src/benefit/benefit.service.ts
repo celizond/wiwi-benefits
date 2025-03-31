@@ -9,7 +9,7 @@ import { DeleteBenefitDto } from './dto/delete-benefit.dto';
 import { DeleteManyBenefitsDto } from './dto/delete-many-benefits.dto';
 import { UpdateManyBenefitsDto } from './dto/update-many-benefits.dto';
 import { ObtainBenefitDto } from './dto/obtain-benefit.dto';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { ObtainManyBenefitsDto } from './dto/obtain-many-benefits.dto';
 
 @Injectable()
 export class BenefitService {
@@ -75,19 +75,27 @@ export class BenefitService {
     return benefitFound;
   }
 
-  findAll( paginationDto: PaginationDto, obtainBenefitDto: ObtainBenefitDto ) {
-  
-
-    const { limit = this.defaultLimit, offset = 0 } = paginationDto;
-
-    return this.pokemonModel.find()
-      .limit( limit )
-      .skip( offset )
-      .sort({
-        no: 1
-      })
+  async findAll( queries: ObtainManyBenefitsDto, obtainBenefitDto: ObtainBenefitDto ) {
+    let benefitsFound;
+    const { sort = "asc" } = queries;
+    const pagination = queries.pagination || { perPage: 100, page: 0 };
+    const { perPage, page } = pagination;
+    const { filter } = obtainBenefitDto;
+    if (filter !== undefined) {
+      const cleanedFilter = this.filterItems(filter);
+      //arreglar
+      benefitsFound = await this.benefitModel.find(cleanedFilter)
+      .limit( perPage )
+      .skip( page )
+      .sort(sort)
       .select('-__v');
-      
+    } else {
+      benefitsFound = await this.benefitModel.find()
+      .limit( perPage )
+      .skip( page )
+      .sort(sort)
+      .select('-__v');
+    }
   }
 
   async update(id: string, updateBenefitDto: UpdateBenefitDto) {

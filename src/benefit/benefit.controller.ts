@@ -7,6 +7,7 @@ import { DeleteManyBenefitsDto } from './dto/delete-many-benefits.dto';
 import { UpdateManyBenefitsDto } from './dto/update-many-benefits.dto';
 import { ObtainBenefitDto } from './dto/obtain-benefit.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { ObtainManyBenefitsDto } from './dto/obtain-many-benefits.dto';
 
 @Controller('benefit')
 export class BenefitController {
@@ -23,8 +24,8 @@ export class BenefitController {
   }
 
   @Get()
-  findAll(@Query() paginationDto: PaginationDto, @Body() obtainBenefitDto: ObtainBenefitDto) {
-    return this.benefitService.findAll(paginationDto, obtainBenefitDto);
+  findAll(@Query() queries: ObtainManyBenefitsDto, @Body() obtainBenefitDto: ObtainBenefitDto) {
+    return this.benefitService.findAll(queries, obtainBenefitDto);
   }
 
   @Patch(':id')

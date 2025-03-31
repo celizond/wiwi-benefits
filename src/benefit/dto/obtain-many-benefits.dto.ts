@@ -6,7 +6,7 @@ import { PaginationDto } from "src/common/dto/pagination.dto";
 
 type SortDirection = "asc" | "desc";
 
-export class ObtainAllBenefitsDto extends PartialType(ObtainBenefitDto) {
+export class ObtainManyBenefitsDto extends PartialType(ObtainBenefitDto) {
 
     @IsOptional()
     @ValidateNested()
