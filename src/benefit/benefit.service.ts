@@ -9,6 +9,7 @@ import { DeleteBenefitDto } from './dto/delete-benefit.dto';
 import { DeleteManyBenefitsDto } from './dto/delete-many-benefits.dto';
 import { UpdateManyBenefitsDto } from './dto/update-many-benefits.dto';
 import { ObtainBenefitDto } from './dto/obtain-benefit.dto';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 @Injectable()
 export class BenefitService {
@@ -72,6 +73,21 @@ export class BenefitService {
       throw new BadRequestException(`Not found benefit with id "${ id }" ${filter && ' and filter'}`);
     }
     return benefitFound;
+  }
+
+  findAll( paginationDto: PaginationDto, obtainBenefitDto: ObtainBenefitDto ) {
+  
+
+    const { limit = this.defaultLimit, offset = 0 } = paginationDto;
+
+    return this.pokemonModel.find()
+      .limit( limit )
+      .skip( offset )
+      .sort({
+        no: 1
+      })
+      .select('-__v');
+      
   }
 
   async update(id: string, updateBenefitDto: UpdateBenefitDto) {

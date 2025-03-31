@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { BenefitService } from './benefit.service';
 import { CreateBenefitDto } from './dto/create-benefit.dto';
 import { UpdateBenefitDto } from './dto/update-benefit.dto';
@@ -6,6 +6,7 @@ import { DeleteBenefitDto } from './dto/delete-benefit.dto';
 import { DeleteManyBenefitsDto } from './dto/delete-many-benefits.dto';
 import { UpdateManyBenefitsDto } from './dto/update-many-benefits.dto';
 import { ObtainBenefitDto } from './dto/obtain-benefit.dto';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 @Controller('benefit')
 export class BenefitController {
@@ -19,6 +20,11 @@ export class BenefitController {
   @Get(':id')
   findOne(@Param('id') id: string, @Body() obtainBenefitDto: ObtainBenefitDto) {
     return this.benefitService.find(id, obtainBenefitDto);
+  }
+
+  @Get()
+  findAll(@Query() paginationDto: PaginationDto, @Body() obtainBenefitDto: ObtainBenefitDto) {
+    return this.benefitService.findAll(paginationDto, obtainBenefitDto);
   }
 
   @Patch(':id')
@@ -41,8 +47,4 @@ export class BenefitController {
     return this.benefitService.removeMany(deleteManyBenefitsDto);
   }
   
-  /* @Get()
-  findAll() {
-    return this.benefitService.findAll();
-  } */
 }
