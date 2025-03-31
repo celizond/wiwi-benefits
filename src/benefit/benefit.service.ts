@@ -84,7 +84,7 @@ export class BenefitService {
   async remove(id: string, deleteBenefitDto: DeleteBenefitDto) {
     const { deletedCount } = await this.benefitModel.deleteOne({ idBenefit: id });
     if ( deletedCount === 0 )
-      throw new BadRequestException(`Benefit with id "${ id }" not found`);
+      throw new BadRequestException(`Not found benefit with id "${ id }"`);
     return `Deleted benefit with id ${id}`;
   }
 

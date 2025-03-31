@@ -35,7 +35,7 @@ export class BenefitController {
     return this.benefitService.updateMany(updateManyBenefitsDto);
   }
 
-  @Delete(':id') //agregar delete
+  @Delete(':id')
   remove(@Param('id') id: string, @Body() deleteBenefitDto: DeleteBenefitDto) {
     return this.benefitService.remove(id, deleteBenefitDto);
   }
